@@ -35,13 +35,28 @@ Es una versión jugable del Tetris clásico con todas las mecánicas que esperar
 
 - Tablero de **10 × 20** celdas.
 - Las **7 piezas estándar** (I, O, T, S, Z, J, L) con colores diferenciados.
+- **Piezas especiales** que aparecen de vez en cuando: pentominós **+**, **U** e **Y** (5 bloques, ~10 %), un **anillo hueco 3×3** como reto (~4 %) y una pieza **1×1** de recompensa que llega justo después de limpiar un Tetris.
+- **Power-ups**: cada 5 líneas limpiadas llega una pieza 1×1 especial (el contador `POWER-UP` del panel muestra el progreso). Se activa al asentarse, sobre la celda en la que descansa, y se puede reservar con Hold:
+  - 💣 **Bomba**: destruye un área de 3×3.
+  - ↔ / ↕ **Rayo**: elimina una fila completa (las de arriba bajan) o vacía una columna.
+  - 🎨 **Tinte**: convierte en comodines (`?`) los bloques del color sobre el que cae, o del color más común si cae al suelo. Un comodín cubre un hueco de su fila.
+  - ⬇ **Gravedad**: compacta los huecos del tablero columna a columna.
+  - ❄ **Congelar**: detiene la caída automática durante 5 s (los movimientos manuales siguen funcionando).
 - **Rotación** con _wall kicks_ básicos (pequeños desplazamientos para que la pieza pueda rotar pegada a la pared).
 - **Soft drop** (bajada acelerada) y **hard drop** (caída instantánea).
 - **Pieza fantasma** (_ghost piece_): muestra dónde aterrizará la pieza actual.
 - **Vista previa** de la siguiente pieza.
+- **Hold** (reservar pieza): guarda la pieza actual para usarla después; una vez por pieza.
 - **Sistema de puntuación** clásico de Tetris (100 / 300 / 500 / 800 multiplicado por nivel).
+- **Combo**: limpiar líneas en piezas consecutivas multiplica la puntuación (x2, x3, x4…).
+- **T-spin** (400 / 800 / 1200 / 1600), **Back-to-Back** (×1.5 entre Tetris y T-spins con líneas) y **Perfect Clear** (+800 / 1200 / 1800 / 2000).
+- **Efectos visuales y sonoros** al encadenar (Web Audio, sin archivos). `M` silencia.
 - **Niveles** que aumentan cada 10 líneas y aceleran la caída.
-- **Pausa** y **Game Over** con opción de reinicio.
+- **Menú de pausa** (`P` o `Esc`): Reanudar, Reiniciar sin recargar, Ver controles y **Nivel inicial** (1-15, se aplica a la siguiente partida y se recuerda). Los controles del juego quedan bloqueados mientras el menú está abierto y unos 150 ms tras reanudar.
+- **Skins** (selector arriba a la izquierda, se aplica al instante y se recuerda): **Retro** (bloques planos, el estilo original), **Neon** (fondo negro y brillo con `shadowBlur`), **Pastel** (colores suaves y esquinas redondeadas) y **Pixel art** (textura de píxeles en cada bloque). Conviven con el modo claro/oscuro.
+- **Pantalla de inicio** con el Top 5 y el botón *Jugar* (la partida ya no arranca sola).
+- **Tabla de records local** (`localStorage`): Top 5 con nombre del jugador, que se pide al terminar la partida si entra en el top. La partida actual se resalta, y se guardan también el **mejor combo** y el **máximo de líneas**. Se muestra en el inicio y en el Game Over; el botón *Resetear records* los borra (pide confirmación).
+- **Game Over** con opción de reinicio.
 
 ---
 
@@ -84,7 +99,9 @@ Después abre `http://localhost:8000` en el navegador.
 | `↑` o `X` | Rotar la pieza en sentido horario |
 | `↓`       | Soft drop (bajar más rápido)      |
 | `Espacio` | Hard drop (caída instantánea)     |
-| `P`       | Pausar / reanudar                 |
+| `C` o `Shift` | Reservar pieza (hold / intercambio) |
+| `P` o `Esc` | Menú de pausa / reanudar        |
+| `M`       | Silenciar / activar sonido        |
 
 ---
 
@@ -97,7 +114,7 @@ El juego se compone de tres archivos que cooperan:
 Define la estructura visual:
 
 - Un `<canvas id="board">` de **300 × 600** píxeles donde se renderiza el tablero.
-- Un panel lateral con `SCORE`, `LINES`, `LEVEL`, vista de la siguiente pieza y la lista de controles.
+- Un panel lateral con `SCORE`, `LINES`, `LEVEL`, slot de reserva (`HOLD`), vista de la siguiente pieza y la lista de controles.
 - Un overlay para los estados **PAUSA** y **GAME OVER**.
 
 ### 2. `style.css`
@@ -108,7 +125,7 @@ Aporta el aspecto visual con estética _dark / retro arcade_: fondo oscuro, tipo
 
 Contiene toda la lógica del juego. A grandes rasgos:
 
-- **Modelo del tablero**: una matriz `ROWS × COLS` donde cada celda guarda `0` (vacía) o un índice de color (1–7) que identifica la pieza.
+- **Modelo del tablero**: una matriz `ROWS × COLS` donde cada celda guarda `0` (vacía) o un índice de color (1–19) que identifica la pieza.
 - **Piezas**: definidas como matrices cuadradas. Para rotar se calcula la transposición + reverso de filas (`rotateCW`).
 - **Detección de colisiones** (`collide`): comprueba que ninguna celda de la pieza salga del tablero ni se solape con bloques ya fijados.
 - **Wall kicks** (`tryRotate`): si la rotación choca, intenta desplazar la pieza ±1 y ±2 columnas antes de descartar el giro.
