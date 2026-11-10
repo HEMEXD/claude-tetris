@@ -168,8 +168,10 @@ function drawBlock(context, x, y, colorIndex, size, alpha) {
   context.globalAlpha = 1;
 }
 
+let gridColor = '#22222e'; // overwritten from the --grid CSS variable by applyTheme()
+
 function drawGrid() {
-  ctx.strokeStyle = '#22222e';
+  ctx.strokeStyle = gridColor;
   ctx.lineWidth = 0.5;
   for (let c = 1; c < COLS; c++) {
     ctx.beginPath();
@@ -300,5 +302,26 @@ document.addEventListener('keydown', e => {
 });
 
 restartBtn.addEventListener('click', init);
+
+// ---- Theme (dark by default, light via toggle) ----
+const themeToggle = document.getElementById('theme-toggle');
+
+function applyTheme(theme) {
+  document.documentElement.dataset.theme = theme;
+  themeToggle.setAttribute('aria-checked', String(theme === 'light'));
+  gridColor = getComputedStyle(document.documentElement).getPropertyValue('--grid').trim() || gridColor;
+  if (current) draw(); // repaint even while paused
+}
+
+themeToggle.addEventListener('click', () => {
+  const theme = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+  applyTheme(theme);
+  try { localStorage.setItem('theme', theme); } catch (e) { /* storage unavailable */ }
+  themeToggle.blur(); // keep keyboard focus on the game (Space = hard drop)
+});
+
+let savedTheme = null;
+try { savedTheme = localStorage.getItem('theme'); } catch (e) { /* ignore */ }
+applyTheme(savedTheme === 'light' ? 'light' : 'dark');
 
 init();
