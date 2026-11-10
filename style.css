@@ -118,6 +118,27 @@ body {
   letter-spacing: 1px;
 }
 
+.combo-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.badge {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.badge[hidden] {
+  display: none;
+}
+
+#hold-canvas,
 #next-canvas {
   display: block;
   border: 1px solid var(--border);
@@ -188,7 +209,151 @@ kbd {
   color: var(--accent);
 }
 
-#restart-btn {
+.overlay-box [hidden] {
+  display: none !important;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.menu-btn.secondary {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+}
+
+.menu-btn.secondary:hover {
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.level-select {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.level-select select {
+  background: var(--kbd-bg);
+  color: var(--text);
+  border: 1px solid var(--kbd-border);
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 13px;
+}
+
+.menu-hint {
+  font-size: 11px;
+  color: var(--label);
+}
+
+.menu-btn.small {
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.records {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+#records-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 14px;
+}
+
+#records-list li {
+  display: grid;
+  grid-template-columns: 22px 1fr auto;
+  gap: 8px;
+  padding: 3px 8px;
+  border-radius: 3px;
+  text-align: left;
+}
+
+#records-list li > span:first-child {
+  color: var(--label);
+}
+
+#records-list li.highlight {
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-weight: 700;
+}
+
+#records-list li.highlight > span:first-child {
+  color: inherit;
+}
+
+#records-list li.empty {
+  display: block;
+  text-align: center;
+  color: var(--muted);
+}
+
+#records-best {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.name-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+#new-record-msg {
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: var(--accent);
+}
+
+#name-input {
+  width: 190px;
+  text-align: center;
+  background: var(--kbd-bg);
+  color: var(--text);
+  border: 1px solid var(--kbd-border);
+  border-radius: 4px;
+  padding: 7px 10px;
+  font-size: 14px;
+}
+
+#name-input:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+#controls-list ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+  font-size: 13px;
+}
+
+#restart-btn,
+.menu-btn {
   margin-top: 8px;
   background: var(--accent);
   color: var(--accent-contrast);
@@ -202,8 +367,40 @@ kbd {
   transition: background 0.15s;
 }
 
-#restart-btn:hover {
+#restart-btn:hover,
+.menu-btn:hover {
   background: var(--accent-hover);
+}
+
+/* ---- Skins: cambian el aspecto de los bloques (JS) y, si hace falta, el fondo del canvas ---- */
+[data-skin="neon"] {
+  --canvas-bg: #05050a;
+  --grid: #14142b;
+}
+
+[data-skin="neon"] #board {
+  border-color: #2a2a55;
+  box-shadow: 0 0 28px rgba(77, 208, 225, 0.25);
+}
+
+.skin-picker {
+  position: fixed;
+  top: 14px;
+  left: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.skin-picker select {
+  background: var(--kbd-bg);
+  color: var(--text);
+  border: 1px solid var(--kbd-border);
+  border-radius: 4px;
+  padding: 3px 6px;
+  font-size: 12px;
 }
 
 /* ---- Toggle de tema ---- */

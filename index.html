@@ -12,6 +12,11 @@
       <span class="switch-track"><span class="switch-thumb"></span></span>
     </button>
 
+    <label class="skin-picker">
+      <span>Skin</span>
+      <select id="skin-select" aria-label="Skin del juego"></select>
+    </label>
+
     <div class="wrapper">
       <h1 class="game-title">TETRIS MATEO</h1>
       <div class="stage">
@@ -33,6 +38,24 @@
             </div>
 
             <div class="panel-section">
+              <span class="label">COMBO</span>
+              <span class="combo-row">
+                <span class="value" id="combo">–</span>
+                <span class="badge" id="b2b" hidden>B2B</span>
+              </span>
+            </div>
+
+            <div class="panel-section">
+              <span class="label">POWER-UP</span>
+              <span class="value" id="power">0/5</span>
+            </div>
+
+            <div class="panel-section">
+              <span class="label">HOLD</span>
+              <canvas id="hold-canvas" width="120" height="120"></canvas>
+            </div>
+
+            <div class="panel-section">
               <span class="label">NEXT</span>
               <canvas id="next-canvas" width="120" height="120"></canvas>
             </div>
@@ -44,7 +67,9 @@
                 <li><kbd>↑</kbd> rotar</li>
                 <li><kbd>↓</kbd> bajar</li>
                 <li><kbd>Space</kbd> caída</li>
-                <li><kbd>P</kbd> pausa</li>
+                <li><kbd>C</kbd><kbd>Shift</kbd> reservar</li>
+                <li><kbd>P</kbd><kbd>Esc</kbd> pausa</li>
+                <li><kbd>M</kbd> sonido</li>
               </ul>
             </div>
           </aside>
@@ -54,7 +79,37 @@
           <div class="overlay-box">
             <p id="overlay-title">GAME OVER</p>
             <p id="overlay-score"></p>
-            <button id="restart-btn">Reiniciar</button>
+
+            <div id="pause-menu" class="menu" hidden>
+              <button id="resume-btn" class="menu-btn" type="button">Reanudar</button>
+              <button id="pause-restart-btn" class="menu-btn" type="button">Reiniciar</button>
+              <button id="controls-btn" class="menu-btn secondary" type="button">Ver controles</button>
+              <label class="level-select">
+                <span>Nivel inicial</span>
+                <select id="start-level"></select>
+              </label>
+              <p class="menu-hint">Se aplica al reiniciar</p>
+            </div>
+
+            <div id="controls-panel" class="menu" hidden>
+              <div id="controls-list" class="controls"></div>
+              <button id="controls-back-btn" class="menu-btn secondary" type="button">Atrás</button>
+            </div>
+
+            <form id="name-form" class="name-form" hidden>
+              <p id="new-record-msg"></p>
+              <input id="name-input" type="text" maxlength="12" autocomplete="off" spellcheck="false" placeholder="Tu nombre" aria-label="Tu nombre" />
+              <button class="menu-btn" type="submit">Guardar</button>
+            </form>
+
+            <div id="records-panel" class="records" hidden>
+              <ol id="records-list"></ol>
+              <p id="records-best"></p>
+            </div>
+
+            <button id="start-btn" class="menu-btn" type="button" hidden>Jugar</button>
+            <button id="restart-btn" type="button">Reiniciar</button>
+            <button id="reset-records-btn" class="menu-btn secondary small" type="button" hidden>Resetear records</button>
           </div>
         </div>
       </div>
